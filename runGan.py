@@ -8,7 +8,7 @@ runcase == 3    training TecoGAN
 runcase == 4    training FRVSR
 runcase == ...  coming... data preparation and so on...
 '''
-import os, subprocess, sys, datetime, signal, shutil
+import os, subprocess, sys, datetime, signal, shutil, requests, zipfile
 
 runcase = int(sys.argv[1])
 print ("Testing test case %d" % runcase)
@@ -39,30 +39,49 @@ def folder_check(path):
     return path
 
 if( runcase == 0 ): # download inference data, trained models
-    # download the trained model
     if(not os.path.exists("./model/")): os.mkdir("./model/")
-    cmd1 = "wget https://ge.in.tum.de/download/data/TecoGAN/model.zip -O model/model.zip;"
-    cmd1 += "unzip model/model.zip -d model; rm model/model.zip"
-    subprocess.call(cmd1, shell=True)
-    
-    # download some test data
-    cmd2 = "wget https://ge.in.tum.de/download/data/TecoGAN/vid3_LR.zip -O LR/vid3.zip;"
-    cmd2 += "unzip LR/vid3.zip -d LR; rm LR/vid3.zip"
-    subprocess.call(cmd2, shell=True)
-    
-    cmd2 = "wget https://ge.in.tum.de/download/data/TecoGAN/tos_LR.zip -O LR/tos.zip;"
-    cmd2 += "unzip LR/tos.zip -d LR; rm LR/tos.zip"
-    subprocess.call(cmd2, shell=True)
-    
-    # download the ground-truth data
+    url='https://ge.in.tum.de/download/data/TecoGAN/model.zip'
+    filename='model/model.zip'
+    urlData = requests.get(url).content
+    with open(filename ,mode='wb') as f: # wb でバイト型を書き込める
+      f.write(urlData)
+    with zipfile.ZipFile('model/model.zip') as existing_zip:
+        existing_zip.extractall('model')
+    os.remove('model/model.zip')
+    url='https://ge.in.tum.de/download/data/TecoGAN/vid3_LR.zip'
+    filename='LR/vid3.zip'
+    urlData = requests.get(url).content
+    with open(filename ,mode='wb') as f: # wb でバイト型を書き込める
+      f.write(urlData)
+    with zipfile.ZipFile('LR/vid3.zip') as existing_zip:
+        existing_zip.extractall('LR')
+    os.remove('LR/vid3.zip')
+    url='https://ge.in.tum.de/download/data/TecoGAN/tos_LR.zip'
+    filename='LR/tos_LR.zip'
+    urlData = requests.get(url).content
+    with open(filename ,mode='wb') as f: # wb でバイト型を書き込める
+      f.write(urlData)
+    with zipfile.ZipFile('LR/tos_LR.zip') as existing_zip:
+        existing_zip.extractall('LR')
+    os.remove('LR/tos_LR.zip')
     if(not os.path.exists("./HR/")): os.mkdir("./HR/")
-    cmd3 = "wget https://ge.in.tum.de/download/data/TecoGAN/vid4_HR.zip -O HR/vid4.zip;"
-    cmd3 += "unzip HR/vid4.zip -d HR; rm HR/vid4.zip"
-    subprocess.call(cmd3, shell=True)
-    
-    cmd3 = "wget https://ge.in.tum.de/download/data/TecoGAN/tos_HR.zip -O HR/tos.zip;"
-    cmd3 += "unzip HR/tos.zip -d HR; rm HR/tos.zip"
-    subprocess.call(cmd3, shell=True)
+    url='https://ge.in.tum.de/download/data/TecoGAN/vid4_HR.zip'
+    filename='HR/vid4.zip'
+    urlData = requests.get(url).content
+    with open(filename ,mode='wb') as f: # wb でバイト型を書き込める
+      f.write(urlData)
+    with zipfile.ZipFile('HR/vid4.zip') as existing_zip:
+        existing_zip.extractall('HR')
+    os.remove('HR/vid4.zip')
+    url='https://ge.in.tum.de/download/data/TecoGAN/tos_HR.zip'
+    filename='HR/tos.zip'
+    urlData = requests.get(url).content
+    with open(filename ,mode='wb') as f: # wb でバイト型を書き込める
+      f.write(urlData)
+    with zipfile.ZipFile('HR/tos.zip') as existing_zip:
+        existing_zip.extractall('HR')
+    os.remove('HR/tos.zip')
+
     
 elif( runcase == 1 ): # inference a trained model
     
@@ -73,7 +92,7 @@ elif( runcase == 1 ): # inference a trained model
     
     # run these test cases one by one:
     for nn in range(len(testpre)):
-        cmd1 = ["python3", "main.py",
+        cmd1 = ["python", "main.py",
             "--cudaID", "0",            # set the cudaID here to use only one GPU
             "--output_dir",  dirstr,    # Set the place to put the results.
             "--summary_dir", os.path.join(dirstr, 'log/'), # Set the place to put the log. 
@@ -97,7 +116,7 @@ elif( runcase == 2 ): # calculate all metrics, and save the csv files, should us
 
     tar_list = [(tarstr+_) for _ in testpre]
     out_list = [(dirstr+_) for _ in testpre]
-    cmd1 = ["python3", "metrics.py",
+    cmd1 = ["python", "metrics.py",
         "--output", dirstr+"metric_log/",
         "--results", ",".join(out_list),
         "--targets", ",".join(tar_list),

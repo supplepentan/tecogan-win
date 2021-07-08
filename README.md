@@ -1,16 +1,4 @@
-# TecoGAN-Original (https://github.com/thunil/TecoGAN)
-
-Video: <https://www.youtube.com/watch?v=pZXFXtfd-Ak>
-Preprint: <https://arxiv.org/pdf/1811.09393.pdf>
-Supplemental results: <https://ge.in.tum.de/wp-content/uploads/2020/05/ClickMe.html>
-
-![TecoGAN teaser image](resources/teaser.jpg)
-
-<img src="resources/tecoGAN-lizard.gif" alt="Lizard" width="900"/><br>
-
-<img src="resources/tecoGAN-armour.gif" alt="Armor" width="900"/><br>
-
-<img src="resources/tecoGAN-spider.gif" alt="Spider" width="600" hspace="150"/><br>
+# TecoGAN for windows (original https://github.com/thunil/TecoGAN)
 
 ### Running the TecoGAN-win Model
 
@@ -30,9 +18,6 @@ python runGan.py 1
 python runGan.py 2
 
 ```
-
-### Tensorboard GIF Summary Example
-<img src="resources/gif_summary_example.gif" alt="gif_summary_example" width="600" hspace="150"/><br>
 
 ### Acknowledgements
 This work was funded by the ERC Starting Grant realFlow (ERC StG-2015-637014).  

@@ -1,6 +1,10 @@
 # TecoGAN for windows (original https://github.com/thunil/TecoGAN)
 
-### Running the TecoGAN-win Model
+## Running the TecoGAN-win Model
+
+### Requirements
+python 3.6.8
+CUDA 10.1
 
 ```bash
 # Install related modules.
@@ -19,11 +23,11 @@ python runGan.py 2
 
 ```
 
-### Acknowledgements
+## Acknowledgements
 This work was funded by the ERC Starting Grant realFlow (ERC StG-2015-637014).  
 Part of the code is based on LPIPS[1], Photo-Realistic SISR[2] and gif_summary[3].
 
-### Reference
+## Reference
 [1] [The Unreasonable Effectiveness of Deep Features as a Perceptual Metric (LPIPS)](https://github.com/richzhang/PerceptualSimilarity)  
 [2] [Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network](https://github.com/brade31919/SRGAN-tensorflow.git)  
 [3] [gif_summary](https://colab.research.google.com/drive/1vgD2HML7Cea_z5c3kPBcsHUIxaEVDiIc)

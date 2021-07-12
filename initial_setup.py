@@ -1,9 +1,12 @@
-import os
+import subprocess
 
-os.system("python -m pip install -U pip setuptools")
-os.system("python -m pip install -r requirements.txt")
-os.system("python -m pip uninstall Keras Keras-Applications Keras-Preprocessing")
-os.system("python -m pip install keras==2.3.1")
-os.system("python -m pip install tensorflow-gpu==1.14.0")
-os.system("python -m pip install requests")
-os.system("python -m pip install torch==1.6.0+cu101 torchvision==0.7.0+cu101 -f https://download.pytorch.org/whl/torch_stable.html")
+cmd_list = {
+    "Update pip setuptools" : ["python", "-m", "pip", "install", "-U", "pip", "setuptools"],
+    "Uninstall Keras Keras-Applications Keras-Preprocessing" : ["python", "-m", "pip", "uninstall", "Keras", "Keras-Applications", "Keras-Preprocessing"],
+    "Install requirements.txt" : ["python", "-m", "pip", "install", "-r", "requirements.txt"],
+    "Install Pytorch CUDA10.1" : ["python", "-m", "pip", "install", "torch==1.6.0+cu101", "torchvision==0.7.0+cu101", "-f", "https://download.pytorch.org/whl/torch_stable.html"]
+    }
+
+for k, v in cmd_list.items():
+    print("====", k, "====")
+    subprocess.run(v)

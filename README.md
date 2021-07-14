@@ -1,11 +1,14 @@
-# TecoGAN for windows (original https://github.com/thunil/TecoGAN)
+# TecoGAN for windows
+
+## Introduction
+This is Windows model of TecoGAN.   
+original : https://github.com/thunil/TecoGAN
+
+## Requirements
+python 3.6.8  
+CUDA 10.0 (for tensorflow-gpu) and 10.1 (for pytorch-gpu)
 
 ## Running the TecoGAN-win Model
-
-### Requirements
-python 3.6.8
-CUDA 10.1
-
 ```bash
 # Install related modules.
 python initial_setup.py
@@ -20,16 +23,20 @@ python runGan.py 1
 # Evaluate the results with 4 metrics, PSNR, LPIPS[1], and our temporal metrics tOF and tLP with pytorch.
 # Take a look at the paper for more details! 
 python runGan.py 2
+```
 
+## Learning (Now Adjusting)
+```bash
+# Collecting date for learning
+python dataPrepare.py --start_id 2000 --duration 120 --REMOVE --disk_path TrainingDataPath
+
+# Train the TecoGAN model, based on our FRVSR model
+# Please check and update the following parameters: 
+# - VGGPath, it uses ./model/ by default. The VGG model is ca. 500MB
+# - TrainingDataPath (see above)
+# - in main.py you can also adjust the output directory of the  testWhileTrain() function if you like (it will write into a train/ sub directory by default)
+python3 runGan.py 3
 ```
 
 ## Acknowledgements
-This work was funded by the ERC Starting Grant realFlow (ERC StG-2015-637014).  
-Part of the code is based on LPIPS[1], Photo-Realistic SISR[2] and gif_summary[3].
-
-## Reference
-[1] [The Unreasonable Effectiveness of Deep Features as a Perceptual Metric (LPIPS)](https://github.com/richzhang/PerceptualSimilarity)  
-[2] [Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network](https://github.com/brade31919/SRGAN-tensorflow.git)  
-[3] [gif_summary](https://colab.research.google.com/drive/1vgD2HML7Cea_z5c3kPBcsHUIxaEVDiIc)
-
-TUM I15 <https://ge.in.tum.de/> , TUM <https://www.tum.de/>
+This code is built on TecoGAN (https://github.com/thunil/TecoGAN),  thank for the authors for sharing their codes.

@@ -156,7 +156,7 @@ def testWhileTrain(FLAGS, testno = 0):
         depending on python, and your training settings
     '''
     desstr = os.path.join(FLAGS.output_dir, 'train/') # saving in the ./train/ directory
-    cmd1 = ["python3", "main.py", # never tested with python2...
+    cmd1 = ["python", "main.py", # never tested with python2...
         "--output_dir", desstr, 
         "--summary_dir", desstr,
         "--mode","inference",
@@ -171,7 +171,8 @@ def testWhileTrain(FLAGS, testno = 0):
     print('[testWhileTrain] step %d:'%testno)
     print(' '.join(cmd1))
     # ignore signals
-    return subprocess.Popen(cmd1, preexec_fn = preexec)
+    #return subprocess.Popen(cmd1, preexec_fn = preexec)
+    return subprocess.Popen(cmd1)
     
 if False: # If you want to take a look of the configuration, True
     print_configuration_op(FLAGS)

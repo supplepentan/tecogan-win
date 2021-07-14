@@ -114,3 +114,5 @@ HR
 # runs
 ex_*
 tx_*
+
+TrainingDataPath

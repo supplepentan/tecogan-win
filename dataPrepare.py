@@ -10,7 +10,7 @@ from lib.data import video
 parser = argparse.ArgumentParser(description='Process parameters.', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('--start_id', default=2000, type=int, help='starting scene index')
 parser.add_argument('--duration', default=120, type=int, help='scene duration')
-parser.add_argument('--disk_path', default="/mnt/netdisk/data/video/", help='the path to save the dataset')
+parser.add_argument('--disk_path', default="TrainingDataPath", help='the path to save the dataset')
 parser.add_argument('--summary_dir', default="", help='the path to save the log')
 parser.add_argument('--REMOVE', action='store_true', help='whether to remove the original video file after data preparation')
 parser.add_argument('--TEST', action='store_true', help='verify video links, save information in log, no real video downloading!')

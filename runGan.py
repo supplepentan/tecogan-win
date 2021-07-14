@@ -8,7 +8,7 @@ runcase == 3    training TecoGAN
 runcase == 4    training FRVSR
 runcase == ...  coming... data preparation and so on...
 '''
-import os, subprocess, sys, datetime, signal, shutil, requests, zipfile
+import os, subprocess, sys, datetime, signal, shutil, requests, zipfile, tarfile
 
 runcase = int(sys.argv[1])
 print ("Testing test case %d" % runcase)
@@ -20,7 +20,8 @@ def mycall(cmd, block=False):
     if not block:
         return subprocess.Popen(cmd)
     else:
-        return subprocess.Popen(cmd, preexec_fn = preexec)
+        #return subprocess.Popen(cmd, preexec_fn = preexec)
+        return subprocess.Popen(cmd)
     
 def folder_check(path):
     try_num = 1
@@ -135,9 +136,15 @@ elif( runcase == 3 ): # Train TecoGAN
     if(not os.path.exists(VGGModelPath)):
         # Download the VGG 19 model from 
         print("VGG model not found, downloading to %s"%VGGPath)
-        cmd0 = "wget http://download.tensorflow.org/models/vgg_19_2016_08_28.tar.gz -O " + os.path.join(VGGPath, "vgg19.tar.gz")
-        cmd0 += ";tar -xvf " + os.path.join(VGGPath,"vgg19.tar.gz") + " -C " + VGGPath + "; rm "+ os.path.join(VGGPath, "vgg19.tar.gz")
-        subprocess.call(cmd0, shell=True)
+        url='http://download.tensorflow.org/models/vgg_19_2016_08_28.tar.gz'
+        filename='model/vgg19.tar.gz'
+        urlData = requests.get(url).content
+        with open(filename ,mode='wb') as f: # wb でバイト型を書き込める
+            f.write(urlData)
+        with tarfile.open(filename, 'r:gz') as t:
+            t.extractall(path='model')
+        os.remove(filename)
+
         
     '''
     Use our pre-trained FRVSR model. If you want to train one, try runcase 4, and update this path by:
@@ -147,18 +154,25 @@ elif( runcase == 3 ): # Train TecoGAN
     if(not os.path.exists(FRVSRModel+".data-00000-of-00001")):
         # Download our pre-trained FRVSR model
         print("pre-trained FRVSR model not found, downloading")
-        cmd0 = "wget http://ge.in.tum.de/download/2019-TecoGAN/FRVSR_Ours.zip -O model/ofrvsr.zip;"
-        cmd0 += "unzip model/ofrvsr.zip -d model; rm model/ofrvsr.zip"
-        subprocess.call(cmd0, shell=True)
-    
-    TrainingDataPath = "/mnt/netdisk/video_data/" 
+        url='http://ge.in.tum.de/download/2019-TecoGAN/FRVSR_Ours.zip'
+        filename='model/ofrvsr.zip'
+        urlData = requests.get(url).content
+        with open(filename ,mode='wb') as f: # wb でバイト型を書き込める
+          f.write(urlData)
+        print("Download finished")
+        with zipfile.ZipFile(filename) as existing_zip:
+            existing_zip.extractall('model')
+        os.remove(filename)
+
+
+    TrainingDataPath = "TrainingDataPath" 
     
     '''Prepare Training Folder'''
     # path appendix, manually define it, or use the current datetime, now_str = "mm-dd-hh"
     now_str = datetime.datetime.now().strftime("%m-%d-%H")
     train_dir = folder_check("ex_TecoGAN%s/"%now_str)
     # train TecoGAN, loss = l2 + VGG54 loss + A spatio-temporal Discriminator
-    cmd1 = ["python3", "main.py",
+    cmd1 = ["python", "main.py",
         "--cudaID", "0", # set the cudaID here to use only one GPU
         "--output_dir", train_dir, # Set the place to save the models.
         "--summary_dir", os.path.join(train_dir,"log/"), # Set the place to save the log. 
@@ -197,8 +211,8 @@ elif( runcase == 3 ): # Train TecoGAN
         "--input_video_dir", TrainingDataPath, 
         "--input_video_pre", "scene",
         "--str_dir", "2000",
-        "--end_dir", "2250",
-        "--end_dir_val", "2290",
+        "--end_dir", "2238",
+        "--end_dir_val", "2276",
         "--max_frm", "119",
         # -- cpu memory for data loading --
         "--queue_thread", "12",# Cpu threads for the data. >4 to speedup the training
@@ -266,7 +280,7 @@ elif( runcase == 3 ): # Train TecoGAN
 elif( runcase == 4 ): # Train FRVSR, loss = l2 warp + l2 content
     now_str = datetime.datetime.now().strftime("%m-%d-%H")
     train_dir = folder_check("ex_FRVSR%s/"%now_str)
-    cmd1 = ["python3", "main.py",
+    cmd1 = ["python", "main.py",
         "--cudaID", "0", # set the cudaID here to use only one GPU
         "--output_dir", train_dir, # Set the place to save the models.
         "--summary_dir", os.path.join(train_dir,"log/"), # Set the place to save the log. 

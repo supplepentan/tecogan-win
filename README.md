@@ -35,7 +35,13 @@ python dataPrepare.py --start_id 2000 --duration 120 --REMOVE --disk_path Traini
 # - VGGPath, it uses ./model/ by default. The VGG model is ca. 500MB
 # - TrainingDataPath (see above)
 # - in main.py you can also adjust the output directory of the  testWhileTrain() function if you like (it will write into a train/ sub directory by default)
-python3 runGan.py 3
+python runGan.py 3
+
+# Train without Dst, (i.e. a FRVSR model)
+python runGan.py 4
+
+# View log via tensorboard
+tensorboard --logdir='ex_TecoGANmm-dd-hh/log' --port=8008
 ```
 
 ## Acknowledgements
